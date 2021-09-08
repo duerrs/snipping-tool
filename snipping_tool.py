@@ -50,19 +50,16 @@ class MyWidget(QtWidgets.QWidget):
         y2 = max(self.begin.y(), self.end.y())
 
         img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
-       # f = asksaveasfile(mode='w', defaultextension=".png")
-       # print(f.name)
         
         t = asksaveasfilename(
                 defaultextension='.png', filetypes=[("Screenshots", '*.png')],
                 initialdir='',
                 initialfile='screenshot.png',
-                title="Choose filename")
-
-        print(t)
+                title="Choose filename"
+                )
         
-
-        img.save(t, "PNG")
+        if t != "":
+            img.save(t, "PNG")
         img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
