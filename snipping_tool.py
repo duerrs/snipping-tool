@@ -4,6 +4,7 @@ import tkinter as tk
 from PIL import ImageGrab
 import numpy as np
 import cv2
+from tkinter.filedialog import SaveAs, askdirectory, asksaveasfile, asksaveasfilename
 
 
 class MyWidget(QtWidgets.QWidget):
@@ -22,7 +23,7 @@ class MyWidget(QtWidgets.QWidget):
         )
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         print('Capture the screen...')
-        self.show()
+        root.withdraw()
 
     def paintEvent(self, event):
         qp = QtGui.QPainter(self)
@@ -41,6 +42,7 @@ class MyWidget(QtWidgets.QWidget):
 
     def mouseReleaseEvent(self, event):
         self.close()
+        
 
         x1 = min(self.begin.x(), self.end.x())
         y1 = min(self.begin.y(), self.end.y())
@@ -48,12 +50,24 @@ class MyWidget(QtWidgets.QWidget):
         y2 = max(self.begin.y(), self.end.y())
 
         img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
-        img.save('capture.png')
-        img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
+       # f = asksaveasfile(mode='w', defaultextension=".png")
+       # print(f.name)
+        
+        t = asksaveasfilename(
+                defaultextension='.png', filetypes=[("Screenshots", '*.png')],
+                initialdir='',
+                initialfile='screenshot.png',
+                title="Choose filename")
 
-        cv2.imshow('Captured Image', img)
+        print(t)
+        
+
+        img.save(t, "PNG")
+        img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+
+    
 
 
 if __name__ == '__main__':
